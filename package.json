@@ -17,6 +17,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
+    "encoding": "^0.1.13",
     "express": "^4.17.1",
     "firebase": "^9.0.0",
     "firebase-admin": "^9.11.1",
