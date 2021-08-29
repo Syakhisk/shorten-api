@@ -2,7 +2,6 @@
   "name": "shorten-api",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js"
@@ -15,7 +14,9 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "firebase": "^9.0.0",
-    "shortid": "^2.2.16"
+    "firebase-admin": "^9.11.1",
+    "http-status": "^1.5.0",
+    "nanoid": "^3.1.25"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
