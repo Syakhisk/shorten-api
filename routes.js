@@ -1,4 +1,4 @@
-const {NOT_FOUND, BAD_REQUEST, CONFLICT} = require('http-status');
+const {NOT_FOUND, BAD_REQUEST, CONFLICT, OK} = require('http-status');
 const router = require('express').Router()
 const { db } = require("./firebase.js")
 const {validate} = require('./regExp')
@@ -25,28 +25,30 @@ res.redirect(resolved)
 })
 
 router.post("/create", async (req,res) => {
-  const {short, long} = req.query
+  const {short, long} = req.body
 
   if(!long && !short){
-    res.sendStatus(BAD_REQUEST)
+    res.status(BAD_REQUEST)
+    res.send({code: BAD_REQUEST, error: "Bad Request!"})
     return
   }
 
   if(validate(long, "URL")){
-    res.sendStatus(BAD_REQUEST)
+    res.status(BAD_REQUEST)
+    res.send({code: BAD_REQUEST, error: "Bad Request!"})
     return
   }
 
   const snapshot = await db_urls.where("short", "==", short).get()
   if(!snapshot.empty){
     res.status(CONFLICT)
-    res.send("Short url exists!")
+    res.send({code: CONFLICT, error: "Short url exists!"})
     return
   }
 
   const _res = await db.collection("urls").add({short, long})
 
-  res.send({id: _res.id, short, long})
+  res.send({code: OK, id: _res.id, short, long})
 
 })
 
