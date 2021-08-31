@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
       msgEl.innerText = "Success!"
 
       shortened_container.classList.remove("hidden")
-      shortened.value = `https://sakis.me/${res.short}`
+      shortened.value = `http://sakis.me/${res.short}`
 
       form.classList.add("hidden")
     } else if(res.code == 409){
