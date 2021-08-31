@@ -1,10 +1,19 @@
-const {NOT_FOUND, BAD_REQUEST, CONFLICT, OK} = require('http-status');
+const {NOT_FOUND, BAD_REQUEST, CONFLICT, OK, NO_CONTENT} = require('http-status');
 const router = require('express').Router()
 const { db } = require("./firebase.js")
 const {validate} = require('./regExp')
 const db_urls = db.collection('urls');
 
-router.get('/favicon.ico', (req, res) => res.status(204));
+
+router.get('/favicon.ico', (req, res) => res.status(NO_CONTENT));
+
+router.use(async (req,res,next) => {
+  const ip = req.headers['x-forwarded-for'] || req.ip;
+  const url = req.url
+  console.log(`[LOG] ${url} from ${ip}`)
+  const _res = await db.collection("log").add({ip, url})
+  next()
+})
 
 router.get("/:url", async (req, res, next) => {
 const { url } = req.params
@@ -46,7 +55,9 @@ router.post("/create", async (req,res) => {
     return
   }
 
-  const _res = await db.collection("urls").add({short, long})
+
+  const ip = req.headers['x-forwarded-for'] || req.ip;
+  const _res = await db.collection("urls").add({short, long, ip})
 
   res.send({code: OK, id: _res.id, short, long})
 
